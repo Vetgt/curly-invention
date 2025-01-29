@@ -1,0 +1,16 @@
+hadoop fs -mkdir -p /user/hduser/hd/
+hadoop fs -put /hduser/home/hdi/dataset.csv /user/hduser/hd/
+
+export HADOOP_HOME=/usr/local/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+source ~/.bashrc
+
+chmod +x /hduser/home/hdi/mapping.py 
+chmod +x /hduser/home/hdi/reduce.py
+
+
+hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming-*.jar \
+  -input /input/weather_data.txt \
+  -output /output/weather_summary \
+  -mapper  "python3 /hduser/home/hdi/mapping.py " \
+  -reducer "python3 /hduser/home/hdi/reduce.py" \
